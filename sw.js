@@ -1,6 +1,6 @@
 /* AllergenCheck – Service Worker (Offline-Shell).
  * Bei App-Änderungen VERSION erhöhen → alter Cache wird verworfen. */
-var VERSION = "ac-v1-2026-09-28-1";
+var VERSION = "ac-v1-2026-09-28-2";
 var CACHE = "allergencheck-" + VERSION;
 /* Tesseract-Kette (versioniert, unveränderlich) dauerhaft getrennt halten. */
 var OCR_CACHE = "allergencheck-ocr-v1";

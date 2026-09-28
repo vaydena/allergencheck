@@ -42,6 +42,13 @@ line("Frühlingszwiebeln", [], [], "ok");
 line("Röstzwiebeln", ["A"], []);
 line("Mandelmilch", ["H"], []);
 line("Tofu", ["F"], []);
+line("1 Espresso", [], [], "ok");
+line("Cappuccino", ["G"], []);
+line("Kaffeeweißer", [], ["F", "G"]);
+line("Malzkaffee", ["A"], []);
+line("Lupinenkaffee", ["P"], []);
+line("Zichorienkaffee", [], ["A"]);
+line("2 cl Haselnusssirup", [], ["H"]);
 line("Xylophonsaft", [], [], "unknown");
 
 const lab = E.analyzeLabel("Zutaten: Weizenmehl (45%), Zucker, Palmfett, Haselnüsse 13%, Magermilchpulver, Emulgator: Lecithine (Soja), Salz. Kann Spuren von Erdnüssen und Sesam enthalten.");
