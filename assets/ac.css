@@ -1,0 +1,158 @@
+/* AllergenCheck – Stylesheet (App + Seiten). Mobile-first, ohne Framework, offline-fähig. */
+:root{
+  --green:#2d6a3e; --green-d:#1f4d2c; --green-l:#3f8a53; --mint:#cfe9d5;
+  --orange:#e0712b; --orange-d:#b85516; --orange-soft:#fdeee3;
+  --bg:#f4f6f1; --card:#fff; --ink:#1d2a20; --muted:#5d6d61; --line:#dde5dc; --soft:#eef3ec;
+  --ok:#2e7d32; --okbg:#e8f4e8; --warn:#9a5b00; --warnbg:#fdf3dc; --bad:#b3261e; --badbg:#fbe7e5;
+  --radius:16px; --radius-s:11px;
+  --e1:0 1px 2px rgba(20,40,25,.06),0 4px 12px -6px rgba(20,40,25,.14);
+  --e2:0 1px 2px rgba(20,40,25,.05),0 10px 26px -12px rgba(20,40,25,.22);
+  --maxw:780px;
+}
+@media (prefers-color-scheme: dark){
+  body.app{
+    --bg:#101712; --card:#18221b; --ink:#e6efe7; --muted:#9fb2a3; --line:#2a3a2e; --soft:#1d2a20;
+    --mint:#244a2f; --orange-soft:#3a2415; --okbg:#16301b; --warnbg:#33280f; --badbg:#3a1714;
+    --ok:#8fd694; --warn:#f2c46d; --bad:#ff9d93;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--green)}
+body.app a{color:var(--green-l)}
+h1,h2,h3{line-height:1.2;margin:0 0 .5em;overflow-wrap:break-word;hyphens:auto}
+h1{font-size:1.6rem} h2{font-size:1.25rem} h3{font-size:1.05rem}
+p{margin:0 0 .8em}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)} .small{font-size:.86rem} .center{text-align:center}
+.hidden{display:none!important}
+
+/* Kopfzeile */
+.topbar{background:linear-gradient(135deg,var(--green-l),var(--green-d));color:#fff;position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top)}
+.topbar .wrap{display:flex;align-items:center;gap:10px;min-height:56px}
+.brand{display:flex;align-items:center;gap:9px;color:#fff;text-decoration:none;font-weight:700;font-size:1.08rem}
+.brand svg{width:32px;height:32px;flex:none}
+.topbar .sp{flex:1}
+.pill{display:inline-block;border-radius:99px;padding:3px 10px;font-size:.78rem;font-weight:600;background:rgba(255,255,255,.18);color:#fff;border:0;cursor:pointer}
+.pill.warn{background:var(--orange);color:#fff}
+
+/* Hauptbereich */
+main{padding:16px 0 96px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--e1);padding:16px;margin:0 0 14px}
+.card h2{margin-bottom:.35em}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row .grow{flex:1;min-width:0}
+.stack>*+*{margin-top:10px}
+
+/* Formular */
+label{display:block;font-weight:600;font-size:.9rem;margin:10px 0 4px}
+input[type=text],input[type=email],input[type=search],input[type=tel],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius-s);padding:10px 12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--green-l);box-shadow:0 0 0 4px rgba(63,138,83,.18)}
+textarea{min-height:170px;resize:vertical;line-height:1.45}
+.check{display:flex;gap:9px;align-items:flex-start;font-weight:500;margin:10px 0}
+.check input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--green)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:inherit;font-weight:650;border:0;border-radius:12px;padding:11px 16px;cursor:pointer;background:var(--green);color:#fff;text-decoration:none;min-height:44px}
+.btn:hover{background:var(--green-d)}
+.btn.sec{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.btn.sec:hover{background:var(--mint)}
+.btn.acc{background:var(--orange)} .btn.acc:hover{background:var(--orange-d)}
+.btn.danger{background:var(--badbg);color:var(--bad);border:1px solid transparent}
+.btn.small{padding:7px 11px;min-height:36px;font-size:.88rem}
+.btn.block{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn svg{width:18px;height:18px}
+
+/* Allergen-Chips */
+.codes{display:flex;flex-wrap:wrap;gap:5px}
+.code{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 7px;border-radius:8px;font-weight:750;font-size:.85rem;background:var(--orange);color:#fff}
+.code.p{background:var(--warnbg);color:var(--warn);border:1.5px dashed var(--warn)}
+.code.none{background:var(--okbg);color:var(--ok)}
+.code.big{min-width:36px;height:36px;font-size:1.02rem;border-radius:10px}
+.codelist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.toggle{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:11px;padding:7px 9px;cursor:pointer;background:var(--card);font-size:.9rem;user-select:none}
+.toggle b{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:var(--soft);color:var(--muted)}
+.toggle.on{border-color:var(--orange);background:var(--orange-soft)}
+.toggle.on b{background:var(--orange);color:#fff}
+
+/* Listen */
+.list{list-style:none;margin:0;padding:0}
+.item{display:flex;gap:12px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.item:last-child{border-bottom:0}
+.item .t{font-weight:650}
+.item .s{font-size:.84rem;color:var(--muted)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--soft);color:var(--muted);margin-left:6px;vertical-align:middle}
+.tag.base{background:var(--mint);color:var(--green-d)}
+.tag.warn{background:var(--warnbg);color:var(--warn)}
+body.app .tag.base{color:var(--ink)}
+
+/* Analyse-Zeilen */
+.lines{list-style:none;margin:0;padding:0}
+.ln{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line)}
+.ln:last-child{border-bottom:0}
+.ln .dot{width:10px;height:10px;border-radius:50%;flex:none;margin-top:7px;background:var(--ok)}
+.ln.partial .dot{background:#e0a100} .ln.unknown .dot{background:var(--bad)} .ln.trace .dot{background:#8a8a8a}
+.ln .body{flex:1;min-width:0}
+.ln .txt{word-break:break-word}
+.ln .why{font-size:.8rem;color:var(--muted)}
+.ln .hint{font-size:.8rem;color:var(--warn)}
+.ln .man{font-size:.74rem;font-weight:700;color:var(--green-l)}
+.ln button{flex:none}
+
+.notice{border-radius:var(--radius-s);padding:10px 12px;font-size:.9rem;margin:10px 0;background:var(--warnbg);color:var(--warn);border:1px solid rgba(154,91,0,.2)}
+.notice.ok{background:var(--okbg);color:var(--ok);border-color:rgba(46,125,50,.2)}
+.notice.bad{background:var(--badbg);color:var(--bad);border-color:rgba(179,38,30,.2)}
+.notice.info{background:var(--soft);color:var(--ink);border-color:var(--line)}
+
+/* Tabs unten */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom)}
+.tabs .in{display:flex;max-width:var(--maxw);width:100%}
+.tabs button{flex:1;border:0;background:none;font:inherit;font-size:.72rem;font-weight:600;color:var(--muted);padding:8px 2px 9px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+.tabs button svg{width:23px;height:23px}
+.tabs button.on{color:var(--green-l)}
+
+/* Dialog */
+dialog{border:0;border-radius:18px;padding:0;max-width:560px;width:calc(100% - 24px);background:var(--card);color:var(--ink);box-shadow:var(--e2)}
+dialog::backdrop{background:rgba(10,20,12,.5)}
+dialog .dh{padding:16px 16px 0} dialog .db{padding:10px 16px} dialog .df{padding:0 16px 16px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:#1d2a20;color:#fff;padding:10px 16px;border-radius:12px;font-size:.92rem;z-index:60;box-shadow:var(--e2);max-width:90vw}
+
+/* Sperr-/Lizenzhinweis */
+.banner{background:var(--orange-soft);color:var(--ink);border-bottom:1px solid var(--line);font-size:.88rem}
+.banner .wrap{padding:8px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.banner b{color:var(--orange-d)}
+body.app .banner b{color:var(--orange)}
+
+.progress{height:6px;border-radius:9px;background:var(--soft);overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--green-l);transition:width .2s}
+
+/* Matrix-Vorschau */
+.mtx{overflow-x:auto}
+.mtx table{border-collapse:collapse;font-size:.82rem;width:100%}
+.mtx th,.mtx td{border:1px solid var(--line);padding:5px 6px;text-align:center}
+.mtx td:first-child,.mtx th:first-child{text-align:left;white-space:nowrap}
+.mtx td.x{background:var(--orange);color:#fff;font-weight:700}
+.mtx td.q{background:var(--warnbg);color:var(--warn);font-weight:700}
+
+/* Öffentliche Seiten */
+.site header.topbar{position:static}
+.hero{background:linear-gradient(160deg,var(--green-l),var(--green-d));color:#fff;padding:44px 0 52px}
+.hero h1{font-size:clamp(1.5rem,7.2vw,2.5rem);margin-bottom:.4em;hyphens:auto;overflow-wrap:break-word}
+.hero p{font-size:1.08rem;opacity:.95;max-width:620px}
+.hero .btn{margin:6px 8px 0 0}
+.hero .btn.sec{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.35)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.feat h3{color:var(--green-d)}
+.price{font-size:2rem;font-weight:800;color:var(--green-d)}
+.legal h2{margin-top:1.4em} .legal{padding:24px 0 60px}
+footer.foot{border-top:1px solid var(--line);padding:22px 0 40px;font-size:.88rem;color:var(--muted)}
+footer.foot a{color:var(--muted);margin-right:14px}
+table.simple{border-collapse:collapse;width:100%}
+table.simple td,table.simple th{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+
+.topbar .brand,body.app .topbar .brand{color:#fff}
+body.app a.btn{color:#fff} body.app a.btn.sec{color:var(--ink)}
+.item .codes{justify-content:flex-end;max-width:48%}
+.pill{white-space:nowrap}

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2d6a3e">
+<title>Betreiber – AllergenCheck</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="stylesheet" href="assets/ac.css">
+<style>
+  main{max-width:1100px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .kpi b{display:block;font-size:1.4rem}
+  .kpi span{font-size:.8rem;color:var(--muted)}
+  table.t{width:100%;border-collapse:collapse;font-size:.88rem}
+  table.t th,table.t td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  table.t tr.sub{cursor:pointer} table.t tr.sub:hover{background:var(--soft)}
+  .st{display:inline-block;border-radius:6px;padding:1px 7px;font-size:.75rem;font-weight:700}
+  .st.active,.st.paid{background:var(--okbg);color:var(--ok)} .st.pending,.st.open{background:var(--warnbg);color:var(--warn)}
+  .st.cancelled{background:var(--soft);color:var(--muted)} .st.revoked{background:var(--badbg);color:var(--bad)}
+  .st.due{background:var(--orange-soft);color:var(--orange-d)}
+  .det{background:var(--soft)} .det td{padding:12px}
+  .acts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+  .mono{font-family:ui-monospace,Consolas,monospace}
+  .tbl{overflow-x:auto}
+</style>
+</head>
+<body class="site">
+<header class="topbar"><div class="wrap" style="max-width:1100px">
+  <span class="brand">AllergenCheck · Betreiber</span><span class="sp"></span>
+  <button class="pill" id="logout" type="button" hidden>Abmelden</button>
+</div></header>
+<main class="wrap">
+  <div class="card" id="login" style="max-width:420px;margin:30px auto">
+    <h2>Anmelden</h2>
+    <label for="key">Betreiber-Schlüssel</label>
+    <input type="text" id="key" autocomplete="off" spellcheck="false" style="-webkit-text-security:disc">
+    <div class="err" id="lerr" style="color:var(--bad);min-height:1.2em;margin-top:6px"></div>
+    <button class="btn block" id="lgo" type="button">Anmelden</button>
+  </div>
+  <div id="app" hidden>
+    <div class="kpis" id="kpis"></div>
+    <div class="card">
+      <div class="row">
+        <input class="grow" type="search" id="q" placeholder="Suche: Firma, E-Mail, Code, Rechnungsnr." aria-label="Suche">
+        <select id="flt" style="width:auto"><option value="">Alle</option><option value="open">Offene Rechnungen</option><option value="due">Läuft bald ab</option><option value="active">Aktiv</option><option value="pending">Warten auf 1. Zahlung</option><option value="cancelled">Gekündigt</option><option value="expired">Abgelaufen</option><option value="revoked">Gesperrt</option></select>
+        <button class="btn sec small" id="reload" type="button">Neu laden</button>
+        <button class="btn small" id="due" type="button">Verlängerungsrechnungen erzeugen</button>
+        <button class="btn sec small" id="csv" type="button">Rechnungen CSV</button>
+      </div>
+      <div class="tbl"><table class="t" style="margin-top:10px"><thead><tr><th>Kunde</th><th>Tarif</th><th>Status</th><th>Gültig bis</th><th>Offen</th><th>Angelegt</th></tr></thead><tbody id="rows"></tbody></table></div>
+    </div>
+  </div>
+</main>
+<script>
+(function () {
+  "use strict";
+  var CFG = { fn: "https://xeuexovdipdiiuzjpzkj.supabase.co/functions/v1", apikey: "sb_publishable_3dLuQ2PfEsjavJyl0fmkaA_DXB8ZS6f" };
+  var d = document, KEY = "", DATA = null, openId = null;
+  function $(id) { return d.getElementById(id); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function dmy(s) { if (!s) return "–"; var p = String(s).slice(0, 10).split("-"); return p.length === 3 ? p[2] + "." + p[1] + "." + p[0] : s; }
+  function euro(c) { return ((c || 0) / 100).toFixed(2).replace(".", ",") + " €"; }
+  function api(action, extra) {
+    var body = Object.assign({ action: action }, extra || {});
+    return fetch(CFG.fn + "/ac-admin", { method: "POST", headers: { "Content-Type": "application/json", apikey: CFG.apikey, Authorization: "Bearer " + CFG.apikey, "x-admin-key": KEY }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (j) { if (r.status === 401) { logout(); throw new Error("unauthorized"); } return j; }); });
+  }
+  function login(k) {
+    KEY = k;
+    return api("list").then(function (j) {
+      if (!j.ok) throw new Error(j.error || "Fehler");
+      try { sessionStorage.setItem("ac.admin", k); } catch (e) {}
+      $("login").hidden = true; $("app").hidden = false; $("logout").hidden = false;
+      DATA = j; render();
+    });
+  }
+  function logout() { KEY = ""; try { sessionStorage.removeItem("ac.admin"); } catch (e) {} $("login").hidden = false; $("app").hidden = true; $("logout").hidden = true; }
+  $("lgo").onclick = function () { $("lerr").textContent = ""; login($("key").value.trim()).catch(function (e) { $("lerr").textContent = e.message === "unauthorized" ? "Schlüssel falsch." : "Fehler: " + e.message; }); };
+  $("key").onkeydown = function (e) { if (e.key === "Enter") $("lgo").click(); };
+  $("logout").onclick = logout;
+  $("reload").onclick = reload;
+  $("q").oninput = render; $("flt").onchange = render;
+  function reload() { return api("list").then(function (j) { if (j.ok) { DATA = j; render(); } }); }
+
+  function state(s) {
+    var today = DATA.today;
+    if (s.status === "revoked") return "revoked";
+    if (s.status === "pending") return "pending";
+    if (s.valid_until && s.valid_until < today) return "expired";
+    return s.status;
+  }
+  function daysLeft(s) { if (!s.valid_until) return null; return Math.round((Date.parse(s.valid_until) - Date.parse(DATA.today)) / 864e5); }
+  function invOf(s) { return DATA.invoices.filter(function (i) { return i.subscription_id === s.id; }); }
+  function render() {
+    var subs = DATA.subscriptions, invs = DATA.invoices;
+    var act = subs.filter(function (s) { return state(s) === "active" || state(s) === "cancelled"; });
+    var mrr = act.reduce(function (a, s) { return a + (s.plan === "year" ? 11900 / 12 : 1200); }, 0);
+    var open = invs.filter(function (i) { return i.status === "open"; });
+    var paidYear = invs.filter(function (i) { return i.status === "paid" && String(i.paid_at).slice(0, 4) === DATA.today.slice(0, 4); }).reduce(function (a, i) { return a + i.amount_cents; }, 0);
+    $("kpis").innerHTML = kpi(act.length, "aktive Abos") + kpi(euro(Math.round(mrr)), "Monatsumsatz (MRR)") + kpi(open.length + " · " + euro(open.reduce(function (a, i) { return a + i.amount_cents; }, 0)), "offene Rechnungen") +
+      kpi(euro(paidYear), "bezahlt " + DATA.today.slice(0, 4)) + kpi(subs.filter(function (s) { return s.status === "pending"; }).length, "warten auf 1. Zahlung");
+    var q = $("q").value.trim().toLowerCase(), f = $("flt").value;
+    var list = subs.filter(function (s) {
+      var st = state(s), iv = invOf(s), dl = daysLeft(s);
+      if (f === "open" && !iv.some(function (i) { return i.status === "open"; })) return false;
+      if (f === "due" && !(st === "active" && dl !== null && dl <= 14)) return false;
+      if (["active", "pending", "cancelled", "expired", "revoked"].indexOf(f) >= 0 && st !== f) return false;
+      if (!q) return true;
+      return [s.company, s.name, s.email, s.token].concat(iv.map(function (i) { return i.number; })).join(" ").toLowerCase().indexOf(q) >= 0;
+    });
+    $("rows").innerHTML = list.map(function (s) {
+      var st = state(s), iv = invOf(s), op = iv.filter(function (i) { return i.status === "open"; }), dl = daysLeft(s);
+      var row = '<tr class="sub" data-id="' + s.id + '"><td><b>' + esc(s.company) + '</b><br><span class="small muted">' + esc(s.name) + " · " + esc(s.email) + "</span></td><td>" + (s.plan === "year" ? "Jahr" : "Monat") +
+        '</td><td><span class="st ' + st + '">' + ({ active: "aktiv", pending: "wartet", cancelled: "gekündigt", expired: "abgelaufen", revoked: "gesperrt" }[st]) + "</span>" + (st === "active" && dl !== null && dl <= 14 ? ' <span class="st due">' + dl + " T</span>" : "") +
+        "</td><td>" + dmy(s.valid_until) + "</td><td>" + (op.length ? op.map(function (i) { return esc(i.number) + " · " + euro(i.amount_cents); }).join("<br>") : "–") + "</td><td>" + dmy(s.created_at) + "</td></tr>";
+      if (openId === s.id) row += '<tr class="det"><td colspan="6">' + detail(s, iv) + "</td></tr>";
+      return row;
+    }).join("") || '<tr><td colspan="6" class="muted">Keine Einträge.</td></tr>';
+  }
+  function kpi(v, l) { return '<div class="kpi"><b>' + v + "</b><span>" + l + "</span></div>"; }
+  function detail(s, iv) {
+    var b = s.billing || {};
+    return '<div class="small"><b>Anschrift:</b> ' + esc([b.company, b.name, b.street, (b.zip || "") + " " + (b.city || ""), b.country, b.vat_id ? "USt-IdNr. " + b.vat_id : ""].filter(Boolean).join(", ")) +
+      '<br><b>Lizenzcode:</b> <span class="mono">' + esc(s.token || "– (nach 1. Zahlung)") + "</span> · <b>zuletzt geprüft:</b> " + dmy(s.last_check_at) + (s.notes ? "<br><b>Notiz:</b> " + esc(s.notes) : "") + "</div>" +
+      '<div class="acts">' +
+      btn("renew", "Verlängerungsrechnung", s.id, !s.token || s.status === "revoked") + btn("renew_switch", "…mit Tarifwechsel", s.id, !s.token || s.status === "revoked") +
+      btn("resend_code", "Code erneut senden", s.id, !s.token || s.status === "revoked") + btn("set_valid_until", "Gültig-bis ändern", s.id) + btn("set_note", "Notiz", s.id) +
+      (s.status === "cancelled" ? btn("uncancel", "Kündigung zurücknehmen", s.id) : btn("cancel", "Kündigen", s.id, s.status === "revoked")) +
+      (s.status === "revoked" ? btn("unrevoke", "Entsperren", s.id) : btn("revoke", "Sperren", s.id, false, true)) + "</div>" +
+      '<table class="t"><thead><tr><th>Rechnung</th><th>Art</th><th>Betrag</th><th>Zeitraum</th><th>Status</th><th></th></tr></thead><tbody>' +
+      iv.map(function (i) {
+        return "<tr><td><a href=\"" + esc(i.pay_link) + '" target="_blank" rel="noopener">' + esc(i.number) + "</a><br><span class=\"small muted\">" + dmy(i.created_at) + (i.mailed_at ? " · gemailt" : " · <b>nicht gemailt</b>") + "</span></td><td>" + (i.kind === "first" ? "Erstrechnung" : "Verlängerung") + " · " + (i.plan === "year" ? "Jahr" : "Monat") + "</td><td>" + euro(i.amount_cents) +
+          "</td><td>" + (i.period_from ? dmy(i.period_from) + " – " + dmy(i.period_to) : "ab Zahlung") + '</td><td><span class="st ' + i.status + '">' + ({ open: "offen", paid: "bezahlt " + dmy(i.paid_at), cancelled: "storniert" }[i.status]) + "</span></td><td>" +
+          (i.status === "open" ? ibtn("set_paid", "Bezahlt ✓", i.id) + " " + ibtn("resend", "Erneut mailen", i.id) + " " + ibtn("cancel_invoice", "Stornieren", i.id) : "") + "</td></tr>";
+      }).join("") + "</tbody></table>";
+  }
+  function btn(a, l, id, dis, danger) { return '<button class="btn small ' + (danger ? "danger" : "sec") + '" data-a="' + a + '" data-s="' + id + '"' + (dis ? " disabled" : "") + ">" + l + "</button>"; }
+  function ibtn(a, l, id) { return '<button class="btn small ' + (a === "set_paid" ? "" : "sec") + '" data-a="' + a + '" data-i="' + id + '">' + l + "</button>"; }
+  var MSG = { open_invoice_exists: "Es gibt bereits eine offene Rechnung.", not_active_yet: "Noch keine Erstzahlung.", is_revoked: "Abo ist gesperrt.", already_paid: "Bereits bezahlt.", is_cancelled: "Rechnung ist storniert.", no_change: "Keine Änderung nötig." };
+  $("rows").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-a]");
+    if (!b) {
+      if (e.target.closest("a")) return;
+      var tr = e.target.closest("tr.sub"); if (!tr) return;
+      openId = openId === tr.getAttribute("data-id") ? null : tr.getAttribute("data-id"); render(); return;
+    }
+    var a = b.getAttribute("data-a"), sid = b.getAttribute("data-s"), iid = b.getAttribute("data-i"), extra = {};
+    if (sid) extra.subscription_id = sid; if (iid) extra.invoice_id = iid;
+    var s = sid ? DATA.subscriptions.filter(function (x) { return x.id === sid; })[0] : null;
+    if (a === "set_paid" && !confirm("Zahlungseingang bestätigen? Der Kunde erhält sofort Lizenzcode bzw. Verlängerungsmail.")) return;
+    if (a === "cancel_invoice" && !confirm("Rechnung stornieren?")) return;
+    if (a === "cancel" && !confirm("Abo kündigen? Es läuft bis zum Ende des bezahlten Zeitraums, danach keine weiteren Rechnungen.")) return;
+    if (a === "revoke" && !confirm("Lizenz SOFORT sperren? Die App geht beim nächsten Online-Start in den Nur-Lesen-Modus.")) return;
+    if (a === "renew_switch") { a = "renew"; extra.plan = s.plan === "year" ? "month" : "year"; if (!confirm("Verlängerungsrechnung mit Tarif „" + (extra.plan === "year" ? "Jahr" : "Monat") + "“ erzeugen und mailen?")) return; }
+    else if (a === "renew" && !confirm("Verlängerungsrechnung erzeugen und an " + s.email + " mailen?")) return;
+    if (a === "set_valid_until") { var dt = prompt("Gültig bis (JJJJ-MM-TT):", s.valid_until || DATA.today); if (!dt) return; extra.date = dt.trim(); }
+    if (a === "set_note") { var n = prompt("Notiz:", s.notes || ""); if (n === null) return; extra.notes = n; }
+    b.disabled = true;
+    api(a, extra).then(function (j) {
+      if (!j.ok) { alert(MSG[j.error] || ("Fehler: " + (j.error || j.mail_error || "?"))); }
+      else if (j.emailed === false) alert("Erledigt – aber die E-Mail konnte nicht versendet werden (" + (j.mail_error || "?") + ")." + (j.token ? "\nLizenzcode: " + j.token : ""));
+      else if (a === "set_paid") alert(j.first ? "Freigeschaltet. Lizenzcode " + j.token + " wurde gemailt (gültig bis " + dmy(j.valid_until) + ")." : "Verlängert bis " + dmy(j.valid_until) + ", Bestätigung gemailt.");
+      return reload();
+    }).catch(function (e) { alert("Fehler: " + e.message); b.disabled = false; });
+  });
+  $("due").onclick = function () {
+    if (!confirm("Für alle aktiven Abos, die in den nächsten 14 Tagen ablaufen und noch keine offene Rechnung haben, Verlängerungsrechnungen erzeugen und mailen?")) return;
+    api("renew_due", { days: 14 }).then(function (j) {
+      alert(j.ok ? j.created + " Rechnung(en) erzeugt." + (j.items || []).map(function (x) { return "\n" + x.number + " · " + x.company + (x.emailed ? "" : " (Mail fehlgeschlagen)"); }).join("") : "Fehler: " + j.error);
+      reload();
+    });
+  };
+  $("csv").onclick = function () {
+    api("export").then(function (j) {
+      if (!j.ok) return alert("Fehler");
+      var rows = [["Rechnungsnr", "Art", "Tarif", "Betrag", "Status", "Erstellt", "Bezahlt", "Von", "Bis", "Firma", "Name", "E-Mail", "Straße", "PLZ", "Ort", "Land", "USt-IdNr"]];
+      j.invoices.forEach(function (i) { var b = i.billing || {}; rows.push([i.number, i.kind, i.plan, (i.amount_cents / 100).toFixed(2).replace(".", ","), i.status, dmy(i.created_at), i.paid_at ? dmy(i.paid_at) : "", dmy(i.period_from), dmy(i.period_to), i.company, i.name, i.email, b.street, b.zip, b.city, b.country, b.vat_id]); });
+      var csv = "﻿" + rows.map(function (r) { return r.map(function (x) { x = String(x == null ? "" : x); return /[;"\n]/.test(x) ? '"' + x.replace(/"/g, '""') + '"' : x; }).join(";"); }).join("\r\n");
+      var a = d.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "allergencheck-rechnungen-" + DATA.today + ".csv"; a.click();
+    });
+  };
+  try { var k = sessionStorage.getItem("ac.admin"); if (k) login(k).catch(function () {}); } catch (e) {}
+})();
+</script>
+</body>
+</html>

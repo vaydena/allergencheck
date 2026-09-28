@@ -1,0 +1,24 @@
+{
+  "name": "AllergenCheck – Allergenkennzeichnung für Gastronomie",
+  "short_name": "AllergenCheck",
+  "description": "Rezept rein, Kennzeichnung der 14 EU-Allergene raus. Speisekarte, Allergen-Matrix und Dokumentation als PDF. Daten bleiben auf dem Gerät.",
+  "lang": "de",
+  "dir": "ltr",
+  "id": "/app.html",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f6f1",
+  "theme_color": "#2d6a3e",
+  "categories": ["business", "food", "productivity"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Etikett prüfen", "short_name": "Etikett", "url": "./app.html?go=check", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Gäste-Auskunft", "short_name": "Gäste", "url": "./app.html?go=guest", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ]
+}

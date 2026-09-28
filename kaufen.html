@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2d6a3e">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://allergencheck.vaydena.de/kaufen.html">
+<title>AllergenCheck abonnieren – 12 € im Monat oder 119 € im Jahr</title>
+<meta name="description" content="AllergenCheck für Ihren Betrieb: 12 € im Monat oder 119 € im Jahr. Zahlung per Rechnung, keine automatische Abbuchung, monatlich kündbar.">
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/ac.css">
+<style>
+  .plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
+  .plan{border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;background:var(--card);position:relative}
+  .plan input{position:absolute;opacity:0}
+  .plan.on{border-color:var(--green);background:#f1f8f2}
+  .plan .n{font-weight:700}
+  .plan .p{font-size:1.5rem;font-weight:800;color:var(--green-d)}
+  .plan .s{font-size:.82rem;color:var(--muted)}
+  .plan .badge{position:absolute;top:-10px;right:10px;background:var(--orange);color:#fff;font-size:.72rem;font-weight:700;border-radius:99px;padding:2px 8px}
+  .seg{display:flex;background:var(--soft);border-radius:12px;padding:4px;gap:4px;margin-bottom:14px}
+  .seg button{flex:1;border:0;background:none;font:inherit;font-weight:650;padding:9px;border-radius:9px;cursor:pointer;color:var(--muted)}
+  .seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--e1)}
+  .grid2{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .err{color:var(--bad);font-size:.9rem;min-height:1.2em;margin-top:8px}
+</style>
+</head>
+<body class="site">
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="index.html"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#fff"/><circle cx="20" cy="21" r="12.5" fill="#cfe9d5"/><circle cx="20" cy="21" r="10.5" fill="#2d6a3e"/><path d="M15 21.5l3.6 3.6 6.6-7.2" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="8.5" r="4" fill="#e0712b"/></svg><span>AllergenCheck</span></a>
+  <span class="sp"></span><a class="pill" href="app.html" style="text-decoration:none">Zur App</a>
+</div></header>
+
+<main class="wrap" style="max-width:640px">
+  <h1 style="margin-top:8px">AllergenCheck abonnieren</h1>
+  <p class="muted">Für Gastronomie, Catering, Bäckereien und Metzgereien. Zahlung per Rechnung – <b>keine automatische Abbuchung</b>. Sie erhalten vor jedem neuen Zeitraum eine Rechnung; wer nicht verlängern möchte, zahlt einfach nicht.</p>
+
+  <div class="card" id="formCard">
+    <div class="seg" role="tablist">
+      <button type="button" class="on" data-mode="new" role="tab">Neu bestellen</button>
+      <button type="button" data-mode="renew" role="tab">Verlängern / Tarif wechseln</button>
+    </div>
+    <form id="f" novalidate>
+      <label>Tarif</label>
+      <div class="plans">
+        <label class="plan on"><input type="radio" name="plan" value="month" checked><div class="n">Monatlich</div><div class="p">12 €</div><div class="s">pro Monat · monatlich kündbar</div></label>
+        <label class="plan"><span class="badge">2 Monate gratis</span><input type="radio" name="plan" value="year"><div class="n">Jährlich</div><div class="p">119 €</div><div class="s">pro Jahr · entspricht 9,92 €/Monat</div></label>
+      </div>
+      <p class="small muted">Endpreise – gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</p>
+
+      <div id="renewBox" hidden>
+        <label for="token">Ihr Lizenzcode</label>
+        <input type="text" id="token" autocomplete="off" spellcheck="false" placeholder="AC-XXXXX-XXXXX-XXXXX">
+        <p class="small muted">Die Rechnung für den nächsten Zeitraum geht an die hinterlegte E-Mail-Adresse. Der neue Zeitraum schließt direkt an den laufenden an.</p>
+      </div>
+
+      <div id="newBox">
+        <label for="company">Betrieb / Firma</label><input type="text" id="company" maxlength="160" autocomplete="organization" placeholder="z. B. Gasthaus zur Linde">
+        <label for="name">Ansprechpartner/in</label><input type="text" id="name" maxlength="120" autocomplete="name">
+        <label for="email">E-Mail (für Rechnung und Lizenzcode)</label><input type="email" id="email" maxlength="160" autocomplete="email" inputmode="email">
+        <label for="street">Straße und Hausnummer</label><input type="text" id="street" maxlength="160" autocomplete="address-line1">
+        <div class="grid2">
+          <div><label for="zip">PLZ</label><input type="text" id="zip" maxlength="20" autocomplete="postal-code" inputmode="numeric"></div>
+          <div><label for="city">Ort</label><input type="text" id="city" maxlength="120" autocomplete="address-level2"></div>
+        </div>
+        <div class="grid2">
+          <div><label for="country">Land</label><select id="country"><option>Deutschland</option><option>Österreich</option><option>Schweiz</option><option>Luxemburg</option><option>Italien (Südtirol)</option></select></div>
+          <div><label for="vat">USt-IdNr. (optional)</label><input type="text" id="vat" maxlength="30"></div>
+        </div>
+        <label class="check"><input type="checkbox" id="b2b"> <span>Ich bestelle als <b>Unternehmer</b> für meinen Betrieb (§ 14 BGB). Ein Verkauf an Verbraucher findet nicht statt.</span></label>
+        <label class="check"><input type="checkbox" id="agb"> <span>Ich akzeptiere die <a href="agb.html" target="_blank">AGB</a>.</span></label>
+        <label class="check"><input type="checkbox" id="privacy"> <span>Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzhinweise</a> gelesen. Meine Angaben werden zur Abwicklung von Rechnung und Lizenz gespeichert.</span></label>
+      </div>
+      <div class="hp" aria-hidden="true"><label>Bitte frei lassen<input type="text" id="hp" tabindex="-1" autocomplete="off"></label></div>
+      <div class="err" id="err" role="alert"></div>
+      <button class="btn block acc" id="go" type="submit" style="margin-top:6px">Zahlungspflichtig bestellen · 12 €</button>
+      <p class="small muted center" style="margin-top:10px">Sie erhalten sofort eine Rechnung per E-Mail. Nach Zahlungseingang kommt Ihr Lizenzcode. Die Testphase läuft bis dahin ganz normal weiter.</p>
+    </form>
+  </div>
+
+  <div class="card" id="doneCard" hidden>
+    <h2>Vielen Dank!</h2>
+    <p id="doneText"></p>
+    <p><a class="btn" id="payLink" href="#">Rechnung ansehen &amp; bezahlen</a></p>
+    <p class="small muted">Keine E-Mail erhalten? Bitte Spam-Ordner prüfen oder an <a href="mailto:kontakt@vaydena.de">kontakt@vaydena.de</a> schreiben.</p>
+  </div>
+
+  <div class="card">
+    <h3>Was ist enthalten?</h3>
+    <ul class="small">
+      <li>Unbegrenzt viele Gerichte, Komponenten und eigene Zutaten</li>
+      <li>Automatische Erkennung der 14 EU-Allergene, Etiketten-Scan per Foto</li>
+      <li>Speisekarte, Allergen-Matrix, Dokumentation und Aushang als PDF</li>
+      <li>Gäste-Auskunft „ohne …“ auf Knopfdruck</li>
+      <li>Nutzung auf allen Geräten Ihres Betriebs, laufende Updates der Zutaten-Datenbank</li>
+      <li>Ihre Rezepturen bleiben auf Ihrem Gerät – kein Cloud-Konto nötig</li>
+    </ul>
+  </div>
+</main>
+<footer class="foot"><div class="wrap"><a href="index.html">Start</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="agb.html">AGB</a></div></footer>
+
+<script>
+(function () {
+  "use strict";
+  var CFG = { fn: "https://xeuexovdipdiiuzjpzkj.supabase.co/functions/v1", key: "sb_publishable_3dLuQ2PfEsjavJyl0fmkaA_DXB8ZS6f" };
+  var T0 = Date.now(), mode = "new", d = document;
+  function $(id) { return d.getElementById(id); }
+  function v(id) { return ($(id).value || "").trim(); }
+  function plan() { return d.querySelector('input[name=plan]:checked').value; }
+  function label() { $("go").textContent = (mode === "renew" ? "Verlängerung anfordern · " : "Zahlungspflichtig bestellen · ") + (plan() === "year" ? "119\u00a0€" : "12\u00a0€"); }
+  d.querySelectorAll(".plan input").forEach(function (r) {
+    r.addEventListener("change", function () { d.querySelectorAll(".plan").forEach(function (p) { p.classList.toggle("on", p.querySelector("input").checked); }); label(); });
+  });
+  d.querySelectorAll(".seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.getAttribute("data-mode");
+      d.querySelectorAll(".seg button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      $("renewBox").hidden = mode !== "renew"; $("newBox").hidden = mode === "renew"; $("err").textContent = ""; label();
+    });
+  });
+  try {
+    var u = new URL(location.href);
+    if (u.searchParams.get("plan") === "year") { d.querySelector('input[value=year]').checked = true; d.querySelector('input[value=year]').dispatchEvent(new Event("change")); }
+    var lic = JSON.parse(localStorage.getItem("ac.lic.v1") || "null");
+    if (lic && lic.token) { $("token").value = lic.token; d.querySelector('[data-mode=renew]').click(); }
+  } catch (e) {}
+  var ERR = {
+    bad_company: "Bitte den Namen des Betriebs angeben.", bad_name: "Bitte eine/n Ansprechpartner/in angeben.", bad_email: "Bitte eine gültige E-Mail-Adresse angeben.",
+    bad_address: "Bitte die vollständige Rechnungsanschrift angeben.", b2b_required: "AllergenCheck wird ausschließlich an Unternehmer verkauft – bitte bestätigen.",
+    agb_required: "Bitte die AGB akzeptieren.", consent_required: "Bitte die Datenschutzhinweise bestätigen.", too_fast: "Bitte das Formular in Ruhe ausfüllen und erneut absenden.",
+    rate_limited: "Zu viele Bestellungen in kurzer Zeit. Bitte später erneut versuchen oder an kontakt@vaydena.de schreiben.", bad_input: "Bitte keine Web-Adressen in die Felder eintragen.",
+    unknown_token: "Dieser Lizenzcode ist uns nicht bekannt. Bitte Eingabe prüfen.", revoked: "Dieser Lizenzcode ist gesperrt. Bitte an kontakt@vaydena.de wenden."
+  };
+  $("f").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var err = $("err"); err.textContent = "";
+    var body = { plan: plan(), hp: v("hp"), elapsed_ms: Date.now() - T0 };
+    if (mode === "renew") {
+      body.token = v("token").toUpperCase();
+      if (!/^AC-?[A-Z0-9]{5}-?[A-Z0-9]{5}-?[A-Z0-9]{5}$/.test(body.token)) { err.textContent = "Bitte den Lizenzcode im Format AC-XXXXX-XXXXX-XXXXX eingeben."; return; }
+    } else {
+      body.company = v("company"); body.name = v("name"); body.email = v("email"); body.street = v("street"); body.zip = v("zip"); body.city = v("city");
+      body.country = v("country"); body.vat_id = v("vat"); body.b2b = $("b2b").checked; body.agb = $("agb").checked; body.privacy = $("privacy").checked;
+      if (body.company.length < 2) { err.textContent = ERR.bad_company; return; }
+      if (body.name.length < 2) { err.textContent = ERR.bad_name; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) { err.textContent = ERR.bad_email; return; }
+      if (body.street.length < 3 || body.zip.length < 4 || body.city.length < 2) { err.textContent = ERR.bad_address; return; }
+      if (!body.b2b) { err.textContent = ERR.b2b_required; return; }
+      if (!body.agb) { err.textContent = ERR.agb_required; return; }
+      if (!body.privacy) { err.textContent = ERR.consent_required; return; }
+    }
+    var btn = $("go"); btn.disabled = true; btn.textContent = "Wird gesendet …";
+    fetch(CFG.fn + "/ac-order", { method: "POST", headers: { "Content-Type": "application/json", apikey: CFG.key, Authorization: "Bearer " + CFG.key }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j && j.ok) {
+          $("formCard").hidden = true; $("doneCard").hidden = false;
+          if (j.pay_link) $("payLink").href = j.pay_link; else $("payLink").hidden = true;
+          $("doneText").textContent = j.spam ? "Ihre Anfrage ist eingegangen." : j.existing
+            ? "Für Ihren Zugang gibt es bereits eine offene Rechnung (" + j.number + "). Sie können sie hier direkt aufrufen."
+            : "Ihre Rechnung " + j.number + " ist unterwegs" + (j.emailed === false ? " (die E-Mail konnte gerade nicht versendet werden – den Link unten bitte speichern)" : " an Ihre E-Mail-Adresse") + ". " + (mode === "renew" ? "Nach Zahlungseingang verlängert sich Ihr Zugang automatisch." : "Nach Zahlungseingang erhalten Sie Ihren Lizenzcode.");
+          window.scrollTo(0, 0);
+          return;
+        }
+        err.textContent = ERR[j && j.error] || "Das hat leider nicht geklappt. Bitte später erneut versuchen oder an kontakt@vaydena.de schreiben.";
+      })
+      .catch(function () { err.textContent = "Keine Verbindung zum Server. Bitte Internetverbindung prüfen."; })
+      .then(function () { btn.disabled = false; label(); });
+  });
+  label();
+})();
+</script>
+</body>
+</html>

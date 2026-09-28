@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AllergenCheck – App</title>
+<meta name="description" content="Allergenkennzeichnung für Gastronomie: Rezept eingeben, die 14 EU-Allergene erkennen, Speisekarte und Dokumentation als PDF.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2d6a3e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/ac.css">
+</head>
+<body class="app">
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="AllergenCheck Startseite">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#fff"/><circle cx="20" cy="21" r="12.5" fill="#cfe9d5"/><circle cx="20" cy="21" r="10.5" fill="#2d6a3e"/><path d="M15 21.5l3.6 3.6 6.6-7.2" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="8.5" r="4" fill="#e0712b"/></svg>
+      <span>AllergenCheck</span>
+    </a>
+    <span class="sp"></span>
+    <button class="pill" id="licPill" type="button" hidden></button>
+  </div>
+</header>
+<div class="banner" id="banner" hidden></div>
+
+<main class="wrap" id="main" aria-live="polite">
+  <p class="muted">Wird geladen …</p>
+</main>
+
+<nav class="tabs" aria-label="Hauptnavigation">
+  <div class="in">
+    <button type="button" data-tab="dishes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Gerichte</button>
+    <button type="button" data-tab="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M8 12h8"/></svg>Etikett</button>
+    <button type="button" data-tab="guest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Gäste</button>
+    <button type="button" data-tab="export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Ausgabe</button>
+    <button type="button" data-tab="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Mehr</button>
+  </div>
+</nav>
+
+<dialog id="dlg"></dialog>
+
+<script src="assets/ac-engine.js"></script>
+<script src="assets/ac-app.js"></script>
+</body>
+</html>
